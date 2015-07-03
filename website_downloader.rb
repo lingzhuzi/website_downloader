@@ -63,21 +63,13 @@ class WebsiteDownloader
   end
 
   def open_url(url)
-    retry_times = 0
-    begin
-      puts "opening: #{url}"
-      @current_page_url = url
-      return open(url, :read_timeout => 60)
-    rescue => e
-      if retry_times < 5
-        retry_times += 1
-        retry
-      else
-        puts e.message
-        puts "error occurred when load page: #{url}"
-        puts e.backtrace.join("\n")
-      end
-    end
+    puts "opening: #{url}"
+    @current_page_url = url
+    return open(url, :read_timeout => 60)
+  rescue => e
+    puts e.message
+    puts "error occurred when load page: #{url}"
+    puts e.backtrace.join("\n")
   end
 
   def file_type(url)
