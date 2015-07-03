@@ -77,7 +77,7 @@ class WebsiteDownloader
     return HTML if url.include?('.jsp')
     return JS   if url.include?('.js')
     return CSS  if url.include?('.css')
-    image_ext_names = ['.jpg', '.jpeg', '.gif', '.png', '.ico', '.svg', '.ttf']
+    image_ext_names = ['.jpg', '.jpeg', '.gif', '.png', '.ico', '.svg', '.ttf', '.pdf']
     image_ext_names.each do |ext|
       return IMAGE if url.include?(ext)
     end
@@ -108,7 +108,7 @@ class WebsiteDownloader
 
             modified_url = modified_url(url)
 
-            link[node_set[:selector]] = modified_url
+            link[node_set[:attr]] = modified_url
           end
         end
       end
@@ -134,7 +134,9 @@ class WebsiteDownloader
     spliters.each do |spliter|
       if modified_url.include?(spliter)
         arr = modified_url.split(spliter)
-        arr[0] = DownloaderCommon.add_html_ext(arr[0])
+        if !([JS, CSS, IMAGE, VIDEO].include?(file_type(modified_url)))
+          arr[0] = DownloaderCommon.add_html_ext(arr[0])
+        end
         modified_url = arr.join(spliter)
         flag = true
         break
